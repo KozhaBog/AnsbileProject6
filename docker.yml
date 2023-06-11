@@ -1,0 +1,50 @@
+- name: Install and start Docker
+  gather_facts: yes
+  hosts: app
+  become: yes
+ 
+  tasks:
+    - name: Install apt-utils and dependencies for Ubuntu
+      when: ansible_os_family == 'Debian'
+      apt:
+        name:
+          - apt-utils
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: latest
+ 
+    - name: Install Docker
+      when: ansible_os_family == 'Debian'
+      apt:
+        name: docker-ce
+        state: latest
+ 
+    - name: Install yum-utils
+      when: ansible_os_family == 'RedHat'
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: latest
+ 
+    - name: Install Docker CentOS
+      when: ansible_os_family == 'RedHat'
+      yum:
+        name: docker-ce
+        state: latest
+ 
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+ 
+    - name: Add user to docker group
+      user:
+        name: kozha
+        groups: rootdocker
+        append: yes
