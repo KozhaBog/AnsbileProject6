@@ -1,0 +1,13 @@
+[all:vars]
+ansible_user='admin'
+ansible_become='yes'
+ansible_become_user='root'
+ansible_become_pass=123456
+ansible_become_method='su'
+
+
+[http]
+ubuntu1 ansible_host=192.168.80.128
+
+[php]
+ubuntu2 ansible_host=192.168.80.130
